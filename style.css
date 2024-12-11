@@ -1,5 +1,6 @@
 :root {
     --new-generation-color: green;
+    --dead-cell-color: red;
 }
 body {
     position: absolute;
@@ -16,6 +17,10 @@ h1 {
     text-align: center;
 }
 
-.glow {
-    box-shadow: 0 0 10px var(--new-generation-color), 0 0 20px var(--new-generation-color), 0 0 30px var(--new-generation-color), 0 0 40px var(--new-generation-color), 0 0 50px;
+.new-born {
+    box-shadow: 0 0 10px var(--new-generation-color), 0 0 20px var(--new-generation-color);
+}
+
+.dead-cell {
+    box-shadow: 0 0 10px var(--dead-cell-color), 0 0 20px var(--dead-cell-color);
 }

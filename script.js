@@ -4,7 +4,7 @@
 
 var ROWS = 10
 var COLS = 8
-var gTurn = 1
+var gTurn = 0
 var gBoard
 var gMainInterval
 
@@ -13,8 +13,7 @@ main()
 
 function main() {
     gBoard = createBoard()
-    play()
-
+    
     // var n = 15
     // while (n--) {
     //     play()
@@ -23,8 +22,10 @@ function main() {
     gMainInterval = setInterval(play, 3000)
 
     document.addEventListener('keypress', function (e) {
-        if (e.key == 'Enter') {
-            clearInterval(gMainInterval)
+        if (e.key === 'Enter') {
+            gTurn = 0
+            gBoard = createBoard()
+            // clearInterval(gMainInterval)
         }
     })
 }
@@ -35,7 +36,8 @@ function createBoard() {
     for (var i = 0; i < ROWS; i++) {
         mat[i] = []
         for (var j = 0; j < COLS; j++) {
-            mat[i][j] = ['*', ' '][getRandomInt(0, 2)]
+            var val = ['*', ' ', ' ', ' '][getRandomInt(0, 4)]
+            mat[i][j] = { val, age: 0 }
         }
     }
     return mat
@@ -54,7 +56,9 @@ function renderBoard() {
     for (var i = 0; i < ROWS; i++) {
         boardTxt += '<tr>'
         for (var j = 0; j < COLS; j++) {
-            boardTxt += `<td>${gBoard[i][j]}</td>`
+            var cellVal = gBoard[i][j].val
+            var glow = getGlow(gBoard[i][j])
+            boardTxt += `<td ${glow}>${cellVal}</td>`
         }
         boardTxt += '</tr>'
     }
@@ -62,14 +66,25 @@ function renderBoard() {
     boardEl.innerHTML = boardTxt
 }
 
+function getGlow(cell) {
+    if (gTurn === 1) return
+    if (cell.val === '*' && cell.age === 1) {
+        return 'class="new-born"'
+    } else if (cell.val === ' ' && cell.age === 1) {
+        return 'class="dead-cell"'
+    }
+    return ''
+}
+
 function countNeighbors(row, col) {
     var count = 0
     for (var i = row - 1; i <= row + 1; i++) {
         if (i < 0 || i >= ROWS) continue
         for (var j = col - 1; j <= col + 1; j++) {
-            if (j < 0 || j >= ROWS) continue
-            if (i == row && j == col) continue // Exclude center
-            if (gBoard[i][j] === '*') count++
+            if (j < 0 || j >= COLS) continue
+            if (i === row && j === col) continue // Exclude center
+            var cellVal = gBoard[i][j].val
+            if (cellVal === '*') count++
         }
     }
     return count
@@ -81,7 +96,12 @@ function runGeneration() {
     for (var i = 0; i < ROWS; i++) {
         mat[i] = []
         for (var j = 0; j < COLS; j++) {
-            mat[i][j] = inRange(countNeighbors(i, j), 2, 5) ? '*' : ' '
+            var lastVal = gBoard[i][j].val
+            var val = inRange(countNeighbors(i, j), 2, 5) ? '*' : ' '
+            mat[i][j] = gBoard[i][j]
+            mat[i][j].val = val
+            if (lastVal !== val) mat[i][j].age = 1
+            else mat[i][j].age++
         }
     }
     return mat
