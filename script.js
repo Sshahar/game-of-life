@@ -1,19 +1,22 @@
 'use strict;'
 // Exercise 60 - Game of Life
-// The Game of Life is a simulation of how a population of creatures evolves from one generation to the next, based on a set of simple rules. This colony is described by a matrix of a user determined size, where each cell is either populated by a creature (marked by an asterisk '*'), or vacant. As with any matrix, each cell can have 8 neighboring cells at the most.
+// The Game of Life is a simulation of how a population of creatures evolves from one generation to the next, based on a set of simple rules. This colony is described by a matrix of a user determined size, where each cell is either populated by a creature (marked by an asterisk LIVING_CELL), or vacant. As with any matrix, each cell can have 8 neighboring cells at the most.
 
-var ROWS = 10
-var COLS = 8
+var DEAD_CELL = ' '
+var LIVING_CELL = '*'
+var ROWS = 8
+var COLS = 10
 var gTurn = 0
 var gBoard
 var gMainInterval
+
 
 main()
 
 
 function main() {
     gBoard = createBoard()
-    
+
     // var n = 15
     // while (n--) {
     //     play()
@@ -36,7 +39,8 @@ function createBoard() {
     for (var i = 0; i < ROWS; i++) {
         mat[i] = []
         for (var j = 0; j < COLS; j++) {
-            var val = ['*', ' ', ' ', ' '][getRandomInt(0, 4)]
+            var val = DEAD_CELL
+            if (0 === getRandomInt(0, 10)) val = LIVING_CELL
             mat[i][j] = { val, age: 0 }
         }
     }
@@ -68,9 +72,9 @@ function renderBoard() {
 
 function getGlow(cell) {
     if (gTurn === 1) return
-    if (cell.val === '*' && cell.age === 1) {
+    if (cell.val === LIVING_CELL && cell.age === 1) {
         return 'class="new-born"'
-    } else if (cell.val === ' ' && cell.age === 1) {
+    } else if (cell.val === DEAD_CELL && cell.age === 1) {
         return 'class="dead-cell"'
     }
     return ''
@@ -84,7 +88,7 @@ function countNeighbors(row, col) {
             if (j < 0 || j >= COLS) continue
             if (i === row && j === col) continue // Exclude center
             var cellVal = gBoard[i][j].val
-            if (cellVal === '*') count++
+            if (cellVal === LIVING_CELL) count++
         }
     }
     return count
@@ -97,7 +101,7 @@ function runGeneration() {
         mat[i] = []
         for (var j = 0; j < COLS; j++) {
             var lastVal = gBoard[i][j].val
-            var val = inRange(countNeighbors(i, j), 2, 5) ? '*' : ' '
+            var val = inRange(countNeighbors(i, j), 2, 5) ? LIVING_CELL : DEAD_CELL
             mat[i][j] = gBoard[i][j]
             mat[i][j].val = val
             if (lastVal !== val) mat[i][j].age = 1
@@ -115,7 +119,7 @@ function getRandomInt(min, max) {
     return min + Math.floor(Math.random() * (max - min))
 }
 
-function getChars(length, char = '*') {
+function getChars(length, char = LIVING_CELL) {
     var res = ''
     for (var i = 0; i < length; i++) {
         res += char
