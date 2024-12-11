@@ -4,8 +4,8 @@
 
 var DEAD_CELL = ' '
 var LIVING_CELL = '*'
-var ROWS = 8
-var COLS = 10
+var ROWS = 30
+var COLS = 80
 var gTurn = 0
 var gBoard
 var gMainInterval
@@ -22,7 +22,7 @@ function main() {
     //     play()
     // }
 
-    gMainInterval = setInterval(play, 3000)
+    gMainInterval = setInterval(play, 200)
 
     document.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
@@ -40,7 +40,7 @@ function createBoard() {
         mat[i] = []
         for (var j = 0; j < COLS; j++) {
             var val = DEAD_CELL
-            if (0 === getRandomInt(0, 10)) val = LIVING_CELL
+            if (0 === getRandomInt(0, 3)) val = LIVING_CELL
             mat[i][j] = { val, age: 0 }
         }
     }
@@ -101,7 +101,15 @@ function runGeneration() {
         mat[i] = []
         for (var j = 0; j < COLS; j++) {
             var lastVal = gBoard[i][j].val
-            var val = inRange(countNeighbors(i, j), 2, 5) ? LIVING_CELL : DEAD_CELL
+            var neighborCount = countNeighbors(i, j)
+            var val = LIVING_CELL
+            if (lastVal === DEAD_CELL && neighborCount === 3) {
+                val = LIVING_CELL
+            } else if (neighborCount > 3 || neighborCount < 2) {
+                val = DEAD_CELL
+            } else if (neighborCount == 2 || neighborCount == 4) {
+                val = gBoard[i][j].val
+            }
             mat[i][j] = gBoard[i][j]
             mat[i][j].val = val
             if (lastVal !== val) mat[i][j].age = 1

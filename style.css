@@ -9,8 +9,6 @@ body {
     transform: translate(-50%, -50%);
 }
 td {
-    border: 2px solid black;
-    padding: 10px;
 }
 
 h1 {
