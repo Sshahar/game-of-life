@@ -6,11 +6,12 @@
     <title>Game of Life</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body onload="onInit()">
     <h1>Joe's Game of Life</h1>
     <table>
         <tbody id="game-board"></tbody>
     </table>
+        <button class="dead-cell" id="toggle-btn" onclick="onToggleGame()">Stop</button>
     <script src="script.js"></script>
 </body>
 </html>

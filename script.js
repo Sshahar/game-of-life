@@ -11,10 +11,11 @@ var gBoard
 var gMainInterval
 
 
-main()
+function onInit() {
+    runGame()
+}
 
-
-function main() {
+function runGame() {
     gBoard = createBoard()
 
     // var n = 15
@@ -26,11 +27,25 @@ function main() {
 
     document.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
-            gTurn = 0
-            gBoard = createBoard()
-            // clearInterval(gMainInterval)
+            onToggleGame()
         }
     })
+}
+
+function onToggleGame() {
+    var elBtn = document.getElementById('toggle-btn')
+    elBtn.classList.toggle('new-born')
+    elBtn.classList.toggle('dead-cell')
+    if (!gMainInterval) {
+        elBtn.innerHTML = 'Stop'
+        gMainInterval = setInterval(play, 200)
+        return
+    } 
+    elBtn.innerHTML = 'Start'
+    clearInterval(gMainInterval)
+    gMainInterval = null
+    // gTurn = 0
+    // gBoard = createBoard()
 }
 
 function createBoard() {
@@ -48,6 +63,8 @@ function createBoard() {
 }
 
 function play() {
+    console.log('hi')
+    
     gBoard = runGeneration(gBoard)
     renderBoard(gBoard)
 }
@@ -66,8 +83,8 @@ function renderBoard() {
         }
         boardTxt += '</tr>'
     }
-    var boardEl = document.getElementById('game-board')
-    boardEl.innerHTML = boardTxt
+    var elBoard = document.getElementById('game-board')
+    elBoard.innerHTML = boardTxt
 }
 
 function getGlow(cell) {
