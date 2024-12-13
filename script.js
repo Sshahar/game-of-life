@@ -55,7 +55,7 @@ function createBoard() {
         mat[i] = []
         for (var j = 0; j < COLS; j++) {
             var val = DEAD_CELL
-            if (0 === getRandomInt(0, 3)) val = LIVING_CELL
+            if (Math.random() < 0.3) val = LIVING_CELL
             mat[i][j] = { val, age: 0 }
         }
     }
@@ -138,10 +138,6 @@ function runGeneration() {
 
 function inRange(num, low, high) {
     return num >= low && num < high
-}
-
-function getRandomInt(min, max) {
-    return min + Math.floor(Math.random() * (max - min))
 }
 
 function getChars(length, char = LIVING_CELL) {
