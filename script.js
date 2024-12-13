@@ -10,8 +10,16 @@ var gTurn = 0
 var gBoard
 var gMainInterval
 
-
 function onInit() {
+    // scale down for mobile 
+    if (!(window.screen.width > 980 && window.screen.height > 680 )) {
+        ROWS = 20
+        COLS = 20
+        document.body.classList.add('mobile')
+        document.querySelector('table').classList.add('mobile')
+    }
+
+
     runGame()
 }
 
@@ -40,7 +48,7 @@ function onToggleGame() {
         elBtn.innerHTML = 'Stop'
         gMainInterval = setInterval(play, 200)
         return
-    } 
+    }
     elBtn.innerHTML = 'Start'
     clearInterval(gMainInterval)
     gMainInterval = null
@@ -64,7 +72,7 @@ function createBoard() {
 
 function play() {
     console.log('hi')
-    
+
     gBoard = runGeneration(gBoard)
     renderBoard(gBoard)
 }
