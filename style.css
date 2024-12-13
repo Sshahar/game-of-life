@@ -3,13 +3,16 @@
     --dead-cell-color: red;
 }
 body {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background-color: #181a1b;
     color: #c6e6e3;
 }
+
+
+table {
+    margin: auto;
+    width: 50%;
+}
+
 td {
     background-color: #131516;
 }

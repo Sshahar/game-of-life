@@ -4,7 +4,7 @@
 
 var DEAD_CELL = ' '
 var LIVING_CELL = '*'
-var ROWS = 30
+var ROWS = 25
 var COLS = 80
 var gTurn = 0
 var gBoard
